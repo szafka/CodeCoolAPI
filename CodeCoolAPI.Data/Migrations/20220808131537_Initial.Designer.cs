@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CodeCoolAPI.Data.Migrations
 {
     [DbContext(typeof(API_Context))]
-    [Migration("20220808123228_Initial")]
+    [Migration("20220808131537_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,10 +33,14 @@ namespace CodeCoolAPI.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuthorId"), 1L, 1);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("AuthorId");
 
@@ -55,19 +59,25 @@ namespace CodeCoolAPI.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("MaterialTypeTypeId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("PublicationDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("TypeId")
                         .HasColumnType("int");
@@ -90,10 +100,14 @@ namespace CodeCoolAPI.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TypeId"), 1L, 1);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("TypeId");
 
@@ -134,7 +148,7 @@ namespace CodeCoolAPI.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReviewId"), 1L, 1);
 
-                    b.Property<string>("AdminName")
+                    b.Property<string>("BaseUserName")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("MaterialId")
@@ -143,34 +157,29 @@ namespace CodeCoolAPI.Data.Migrations
                     b.Property<int>("Rate")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("ReviewDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("ReviewId");
 
-                    b.HasIndex("AdminName");
+                    b.HasIndex("BaseUserName");
 
                     b.HasIndex("MaterialId");
-
-                    b.HasIndex("UserName");
 
                     b.ToTable("Reviews");
                 });
 
-            modelBuilder.Entity("CodeCoolAPI.Data.Model.UsersModel.Admin", b =>
+            modelBuilder.Entity("CodeCoolAPI.Data.Model.UsersModel.BaseUser", b =>
                 {
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid?>("CredentialsId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nickname")
                         .HasColumnType("nvarchar(max)");
@@ -182,7 +191,9 @@ namespace CodeCoolAPI.Data.Migrations
 
                     b.HasIndex("CredentialsId");
 
-                    b.ToTable("Admins");
+                    b.ToTable("BaseUsers");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("BaseUser");
                 });
 
             modelBuilder.Entity("CodeCoolAPI.Data.Model.UsersModel.CredentialsContainer", b =>
@@ -213,30 +224,23 @@ namespace CodeCoolAPI.Data.Migrations
                             CredentialsId = new Guid("ac0b5af3-7368-414a-b40c-ccb9c97adeae"),
                             Login = "admin",
                             Password = "admin",
-                            PasswordHash = new byte[] { 191, 110, 172, 67, 69, 98, 85, 107, 66, 227, 115, 167, 200, 170, 151, 56, 7, 27, 50, 231, 126, 34, 51, 71, 40, 63, 31, 72, 66, 144, 54, 149, 53, 80, 32, 76, 114, 93, 149, 193, 7, 167, 96, 254, 208, 75, 251, 67, 114, 172, 248, 227, 158, 83, 31, 5, 176, 93, 186, 47, 86, 169, 225, 156 },
-                            PasswordSalt = new byte[] { 188, 68, 85, 250, 95, 131, 16, 157, 42, 204, 201, 149, 124, 208, 195, 53, 237, 167, 171, 174, 202, 143, 97, 28, 28, 52, 205, 112, 52, 96, 241, 142, 50, 174, 178, 140, 253, 103, 239, 62, 175, 211, 174, 53, 64, 84, 15, 159, 246, 146, 24, 153, 38, 189, 194, 198, 211, 78, 175, 42, 157, 122, 206, 242, 8, 238, 22, 130, 136, 1, 88, 180, 43, 134, 227, 174, 199, 16, 29, 65, 113, 64, 11, 20, 47, 15, 21, 68, 214, 179, 229, 80, 202, 199, 200, 94, 213, 56, 132, 99, 240, 217, 71, 207, 159, 153, 156, 40, 213, 88, 188, 134, 42, 168, 127, 52, 171, 238, 96, 190, 215, 167, 58, 73, 55, 252, 230, 105 }
+                            PasswordHash = new byte[] { 148, 233, 57, 106, 84, 186, 76, 152, 204, 72, 71, 12, 174, 70, 69, 163, 237, 105, 192, 5, 74, 225, 148, 102, 207, 104, 72, 32, 126, 37, 44, 62, 8, 63, 35, 97, 94, 10, 191, 30, 77, 149, 15, 241, 9, 145, 79, 115, 234, 174, 139, 247, 179, 189, 128, 117, 96, 5, 105, 13, 90, 89, 151, 223 },
+                            PasswordSalt = new byte[] { 163, 230, 214, 114, 53, 176, 159, 62, 15, 106, 123, 240, 229, 141, 168, 31, 200, 112, 171, 241, 87, 24, 95, 207, 195, 60, 62, 187, 255, 240, 228, 104, 49, 104, 178, 180, 193, 241, 139, 57, 169, 208, 161, 132, 45, 117, 176, 223, 64, 200, 78, 58, 151, 233, 158, 250, 230, 245, 77, 236, 121, 99, 53, 88, 187, 240, 84, 117, 240, 209, 0, 195, 61, 138, 110, 129, 132, 205, 30, 51, 12, 30, 249, 176, 248, 215, 43, 136, 171, 23, 241, 227, 128, 180, 67, 198, 186, 122, 229, 152, 82, 131, 71, 43, 241, 213, 48, 9, 47, 89, 120, 38, 101, 19, 63, 251, 22, 217, 223, 253, 35, 168, 211, 190, 38, 19, 68, 239 }
                         });
+                });
+
+            modelBuilder.Entity("CodeCoolAPI.Data.Model.UsersModel.Admin", b =>
+                {
+                    b.HasBaseType("CodeCoolAPI.Data.Model.UsersModel.BaseUser");
+
+                    b.HasDiscriminator().HasValue("Admin");
                 });
 
             modelBuilder.Entity("CodeCoolAPI.Data.Model.UsersModel.User", b =>
                 {
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                    b.HasBaseType("CodeCoolAPI.Data.Model.UsersModel.BaseUser");
 
-                    b.Property<Guid?>("CredentialsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Nickname")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Surname")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Name");
-
-                    b.HasIndex("CredentialsId");
-
-                    b.ToTable("Users");
+                    b.HasDiscriminator().HasValue("User");
                 });
 
             modelBuilder.Entity("CodeCoolAPI.Data.Model.CodecoolDataModel.Material", b =>
@@ -260,9 +264,9 @@ namespace CodeCoolAPI.Data.Migrations
 
             modelBuilder.Entity("CodeCoolAPI.Data.Model.CodecoolDataModel.Review", b =>
                 {
-                    b.HasOne("CodeCoolAPI.Data.Model.UsersModel.Admin", null)
+                    b.HasOne("CodeCoolAPI.Data.Model.UsersModel.BaseUser", null)
                         .WithMany("Reviews")
-                        .HasForeignKey("AdminName");
+                        .HasForeignKey("BaseUserName");
 
                     b.HasOne("CodeCoolAPI.Data.Model.CodecoolDataModel.Material", "Material")
                         .WithMany("Reviews")
@@ -270,27 +274,10 @@ namespace CodeCoolAPI.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CodeCoolAPI.Data.Model.UsersModel.User", "User")
-                        .WithMany("Reviews")
-                        .HasForeignKey("UserName")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Material");
-
-                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CodeCoolAPI.Data.Model.UsersModel.Admin", b =>
-                {
-                    b.HasOne("CodeCoolAPI.Data.Model.UsersModel.CredentialsContainer", "Credentials")
-                        .WithMany()
-                        .HasForeignKey("CredentialsId");
-
-                    b.Navigation("Credentials");
-                });
-
-            modelBuilder.Entity("CodeCoolAPI.Data.Model.UsersModel.User", b =>
+            modelBuilder.Entity("CodeCoolAPI.Data.Model.UsersModel.BaseUser", b =>
                 {
                     b.HasOne("CodeCoolAPI.Data.Model.UsersModel.CredentialsContainer", "Credentials")
                         .WithMany()
@@ -314,12 +301,7 @@ namespace CodeCoolAPI.Data.Migrations
                     b.Navigation("Materials");
                 });
 
-            modelBuilder.Entity("CodeCoolAPI.Data.Model.UsersModel.Admin", b =>
-                {
-                    b.Navigation("Reviews");
-                });
-
-            modelBuilder.Entity("CodeCoolAPI.Data.Model.UsersModel.User", b =>
+            modelBuilder.Entity("CodeCoolAPI.Data.Model.UsersModel.BaseUser", b =>
                 {
                     b.Navigation("Reviews");
                 });
