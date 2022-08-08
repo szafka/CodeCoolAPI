@@ -2,10 +2,10 @@
 {
     public interface IUnitOfWork
     {
-        IAuthorRepository AuthorRepository { get; }
-        IMaterialRepository MaterialRepository { get; }
-        IMaterialTypeRepository MaterialTypeRepository { get; }
-        IReviewRepository ReviewRepository { get; }
+        IAuthorRepository Authors { get; }
+        IMaterialRepository Materials { get; }
+        IMaterialTypeRepository MaterialTypes { get; }
+        IReviewRepository Reviews { get; }
 
     }
 }
