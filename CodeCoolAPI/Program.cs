@@ -1,4 +1,4 @@
-using CodeCoolAPI.Data.Model.API_Context;
+
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("CodeCoolApiDB");

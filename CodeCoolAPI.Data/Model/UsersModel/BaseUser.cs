@@ -1,9 +1,8 @@
-﻿using CodeCoolAPI.Data.Model.CodecoolDataModel;
-
-namespace CodeCoolAPI.Data.Model.UsersModel
+﻿namespace CodeCoolAPI.Data.Model.UsersModel
 {
     public class BaseUser
     {
+        [Key]
         public string? Name { get; set; }
         public string? Surname { get; set; }
         public string? Nickname { get; set; }

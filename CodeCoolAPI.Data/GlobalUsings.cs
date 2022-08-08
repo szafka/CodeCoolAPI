@@ -1,1 +1,4 @@
 ﻿global using CodeCoolAPI.Data.Model.UsersModel;
+global using CodeCoolAPI.Data.Model.CodecoolDataModel;
+global using Microsoft.EntityFrameworkCore;
+global using System.ComponentModel.DataAnnotations;
