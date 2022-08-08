@@ -1,5 +1,8 @@
-var builder = WebApplication.CreateBuilder(args);
+using CodeCoolAPI.Data.Model.API_Context;
 
+var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("CodeCoolApiDB");
+builder.Services.AddDbContext<API_Context>(options => options.UseSqlServer(connectionString));
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
